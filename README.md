@@ -1,6 +1,4 @@
 
-
-# Support
 * Google Translate
 * DeepL
 
