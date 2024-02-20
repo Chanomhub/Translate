@@ -7,3 +7,4 @@ This is an add-on for several main projects.
 
 # Credit
 * Gmonarque [https://github.com/gmonarque/go-json-translate]
+* Mololab [https://github.com/mololab/json-translator]
