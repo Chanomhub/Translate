@@ -11,6 +11,7 @@
  ❌ Godot Engine
  ❌ Ren’Py
  ❌ Unreal Engine
+ ❌ Adobe Flash Player
 # Credit
 * Gmonarque [https://github.com/gmonarque/go-json-translate]
 * Mololab [https://github.com/mololab/json-translator]
