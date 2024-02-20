@@ -15,7 +15,7 @@
  <br>
  ❌ Ren’Py
 <br>
- ❌ Unreal Engine
+ ❌ Unreal Engine (Version 4 only)
 <br>
  ❌ Adobe Flash Player
 <br>
@@ -33,3 +33,5 @@
 * Bbepis [https://github.com/bbepis/XUnity.AutoTranslator]
 * VP-GAMES [https://github.com/VP-GAMES/LocalizationEditor]
 * Duc010298-1 [https://github.com/duc010298-1/translate-renpy]
+* Rionix [https://github.com/rionix/LocalizationUE4]
+* 
