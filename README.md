@@ -28,3 +28,5 @@
 # Credit
 * Gmonarque [https://github.com/gmonarque/go-json-translate]
 * Mololab [https://github.com/mololab/json-translator]
+* Elizagamedev [https://github.com/elizagamedev/wolftrans]
+* TokcDK [https://github.com/TokcDK/WolfTranslator]
