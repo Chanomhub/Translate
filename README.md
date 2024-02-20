@@ -10,6 +10,7 @@
  ❌ RPG Wolf
  ❌ Godot Engine
  ❌ Ren’Py
+ ❌ Unreal Engine
 # Credit
 * Gmonarque [https://github.com/gmonarque/go-json-translate]
 * Mololab [https://github.com/mololab/json-translator]
