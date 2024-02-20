@@ -34,4 +34,4 @@
 * VP-GAMES [https://github.com/VP-GAMES/LocalizationEditor]
 * Duc010298-1 [https://github.com/duc010298-1/translate-renpy]
 * Rionix [https://github.com/rionix/LocalizationUE4]
-* 
+* Tkarabela [https://github.com/tkarabela/translate-swf]
