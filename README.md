@@ -35,3 +35,4 @@
 * Duc010298-1 [https://github.com/duc010298-1/translate-renpy]
 * Rionix [https://github.com/rionix/LocalizationUE4]
 * Tkarabela [https://github.com/tkarabela/translate-swf]
+* GamemakerChina [https://github.com/GamemakerChina/gms2translation]
