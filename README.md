@@ -4,7 +4,7 @@
 * Google Translate
 * DeepL
 
-# Supports translation files
+# Supports translation
  ✔️ RPGM (JSON)
 <br>
  ❌ Unity
