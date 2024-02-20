@@ -6,4 +6,4 @@ This is an add-on for several main projects.
 * DeepL
 
 # Credit
-* gmonarque[https://github.com/gmonarque/go-json-translate]
+* Gmonarque [https://github.com/gmonarque/go-json-translate]
