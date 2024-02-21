@@ -31,7 +31,7 @@
 * Bbepis [https://github.com/bbepis/XUnity.AutoTranslator] -> 5.3.0
 * VP-GAMES [https://github.com/VP-GAMES/LocalizationEditor] -> 1.6.4
 * Duc010298-1 [https://github.com/duc010298-1/translate-renpy] -> 1.6
-* Rionix [https://github.com/rionix/LocalizationUE4]
+* Rionix [https://github.com/rionix/LocalizationUE4] -> 1.7.0
 * Tkarabela [https://github.com/tkarabela/translate-swf]
 * GamemakerChina [https://github.com/GamemakerChina/gms2translation]
 * Nidhaloff [https://github.com/nidhaloff/deep-translator] -> 1.11.4
