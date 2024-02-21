@@ -1,0 +1,94 @@
+{
+  "version": "2.2.1",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "description": "Translate your JSON file or object into another languages with Google Translate API",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "free",
+    "i18n",
+    "json",
+    "translator",
+    "javascript",
+    "typescript",
+    "node",
+    "translate",
+    "internationalization"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ParvinEyvazov/json-translator.git"
+  },
+  "homepage": "https://github.com/ParvinEyvazov/json-translator#readme",
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "jest",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "test:watch": "jest --watch"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "@parvineyvazov/json-translator",
+  "author": "ParvinEyvazov",
+  "module": "dist/json-translator.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/json-translator.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/json-translator.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "bin": {
+    "jsontt": "bin/jsontt"
+  },
+  "devDependencies": {
+    "@types/http-proxy-agent": "^4.0.1",
+    "bing-translate-api": "^2.8.0",
+    "husky": "^7.0.4",
+    "jest": "^27.4.7",
+    "nock": "^13.4.0",
+    "ts-jest": "^27.1.3",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.3"
+  },
+  "dependencies": {
+    "@iamtraction/google-translate": "^2.0.1",
+    "@types/bluebird": "^3.5.36",
+    "@types/filesystem": "^0.0.32",
+    "@vitalets/google-translate-api": "^9.2.0",
+    "axios": "^1.2.2",
+    "bing-translate-api": "^2.8.0",
+    "bluebird": "^3.7.2",
+    "commander": "^10.0.1",
+    "cwait": "^1.1.2",
+    "figlet": "^1.6.0",
+    "http-proxy-agent": "^5.0.0",
+    "inquirer": "^7.0.0",
+    "loading-cli": "^1.1.0",
+    "yaml": "^2.3.2"
+  }
+}
