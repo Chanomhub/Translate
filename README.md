@@ -24,8 +24,8 @@
  ❌ Others
 <br>
 # Credit
-* Gmonarque [https://github.com/gmonarque/go-json-translate]
-* Mololab [https://github.com/mololab/json-translator]
+* Gmonarque [https://github.com/gmonarque/go-json-translate] -> 1.00
+* Mololab [https://github.com/mololab/json-translator] -> 2.2.1
 * Elizagamedev [https://github.com/elizagamedev/wolftrans]
 * TokcDK [https://github.com/TokcDK/WolfTranslator]
 * Bbepis [https://github.com/bbepis/XUnity.AutoTranslator]
