@@ -34,3 +34,4 @@
 * Rionix [https://github.com/rionix/LocalizationUE4]
 * Tkarabela [https://github.com/tkarabela/translate-swf]
 * GamemakerChina [https://github.com/GamemakerChina/gms2translation]
+* Nidhaloff [https://github.com/nidhaloff/deep-translator]
