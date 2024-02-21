@@ -27,7 +27,7 @@
 * Gmonarque [https://github.com/gmonarque/go-json-translate] -> 1.00
 * Mololab [https://github.com/mololab/json-translator] -> 2.2.1
 * Elizagamedev [https://github.com/elizagamedev/wolftrans] -> ?
-* TokcDK [https://github.com/TokcDK/WolfTranslator]
+* TokcDK [https://github.com/TokcDK/WolfTranslator] -> ?
 * Bbepis [https://github.com/bbepis/XUnity.AutoTranslator]
 * VP-GAMES [https://github.com/VP-GAMES/LocalizationEditor]
 * Duc010298-1 [https://github.com/duc010298-1/translate-renpy]
