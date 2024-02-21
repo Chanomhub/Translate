@@ -1,7 +1,7 @@
 
 * Google Translate
 * DeepL
-
+* Others...
 # Supports translation
  ✔️ RPGM (JSON)
 <br>
@@ -21,7 +21,7 @@
  <br>
  ❌ Pixel Game Maker MV player
 <br>
- ❌ Others
+  Others...
 <br>
 # Credit
 * Gmonarque [https://github.com/gmonarque/go-json-translate] -> 1.00
