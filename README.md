@@ -28,7 +28,7 @@
 * Mololab [https://github.com/mololab/json-translator] -> 2.2.1
 * Elizagamedev [https://github.com/elizagamedev/wolftrans] -> ?
 * TokcDK [https://github.com/TokcDK/WolfTranslator] -> ?
-* Bbepis [https://github.com/bbepis/XUnity.AutoTranslator]
+* Bbepis [https://github.com/bbepis/XUnity.AutoTranslator] -> 5.3.0
 * VP-GAMES [https://github.com/VP-GAMES/LocalizationEditor]
 * Duc010298-1 [https://github.com/duc010298-1/translate-renpy]
 * Rionix [https://github.com/rionix/LocalizationUE4]
