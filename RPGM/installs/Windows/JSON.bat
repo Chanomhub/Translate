@@ -20,6 +20,4 @@ rem usage example jsontt
 
 jsontt  -t en
 
-echo "Successfully translated en.json file to *.json."
-
 pause
