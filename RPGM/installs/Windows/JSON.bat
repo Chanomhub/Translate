@@ -16,9 +16,9 @@ npm install --global @parvineyvazov/json-translator
 
 echo "json-translator installed successfully"
 
-rem usage example json-translator
+rem usage example jsontt 
 
-json-translator -i en.json -o th.json
+jsontt  -t en
 
 echo "Successfully translated en.json file to *.json."
 
