@@ -18,6 +18,4 @@ echo "json-translator installed successfully"
 
 rem usage example jsontt 
 
-jsontt  -h
-
 pause
