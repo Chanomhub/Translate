@@ -16,6 +16,5 @@ npm install --global @parvineyvazov/json-translator
 
 echo "json-translator installed successfully"
 
-rem usage example jsontt 
 
 pause
