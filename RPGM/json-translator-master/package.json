@@ -80,7 +80,7 @@
     "@types/bluebird": "^3.5.42",
     "@types/filesystem": "^0.0.32",
     "@vitalets/google-translate-api": "^9.2.0",
-    "axios": "^1.6.4",
+    "axios": "^1.2.2",
     "bing-translate-api": "^2.10.0",
     "bluebird": "^3.7.2",
     "commander": "^10.0.1",
