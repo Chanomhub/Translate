@@ -19,7 +19,7 @@ func translateJSON(data interface{}) (interface{}, error) {
 			if key == "name" {
  
 		var targetLanguage = 
-		var translated, err = gt.Translate(value.(string), *fromLanguage, *targetLanguage) // Use the targetLanguage
+		var translated, err = gt.Translate(value.(string), *fromLanguage, targetLanguage) // Use the targetLanguage
 		if err != nil {
 			return nil, fmt.Errorf("error translating 'name': %w", err)
 		}
