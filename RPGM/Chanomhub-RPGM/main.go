@@ -10,23 +10,22 @@ import (
 	gt "github.com/bas24/googletranslatefree"
 )
 
-// Revised translateJSON for robustness
+// Define a function to handle deep translation within a JSON structure
 func translateJSON(data interface{}) (interface{}, error) {
+
 	switch v := data.(type) {
-	case map[string]interface{}:
+	case map[string]interface{}: // If it's a map (object)
 		for key, value := range v {
 			if key == "name" {
-				switch strValue := value.(type) { // Check type before translating
-				case string:
-					translated, err := gt.Translate(strValue, *fromLanguage, *targetLanguage)
-					if err != nil {
-						return nil, fmt.Errorf("error translating 'name': %w", err)
-					}
-					v[key] = translated
-				default:
-					fmt.Println("Warning: Non-string value found for 'name' field. Skipping translation.")
-				}
-			} else {
+ 
+		var targetLanguage = 
+		var translated, err = gt.Translate(value.(string), *fromLanguage, *targetLanguage) // Use the targetLanguage
+		if err != nil {
+			return nil, fmt.Errorf("error translating 'name': %w", err)
+		}
+		v[key] = translated
+	} else {
+				// Recursive call for nested structures
 				translatedValue, err := translateJSON(value)
 				if err != nil {
 					return nil, err
@@ -35,8 +34,16 @@ func translateJSON(data interface{}) (interface{}, error) {
 			}
 		}
 		return v, nil
-	// ... (Similar case for []interface{})
-	default:
+	case []interface{}: // If it's an array
+		for i, value := range v {
+			translatedValue, err := translateJSON(value)
+			if err != nil {
+				return nil, err
+			}
+			v[i] = translatedValue
+		}
+		return v, nil
+	default: // Base case for other data types
 		return data, nil
 	}
 }
@@ -45,7 +52,7 @@ func main() {
 	// Define flags for input file name and target language
 	inputFileName := flag.String("input", "i", "Input JSON file name")
 	targetLanguage := flag.String("target", "t", "Target language code (e.g., 'es' for Spanish, 'fr' for French)")
-        fromLanguage := flag.String("from", "f", "Your default game language or 'auto' can be used.")
+    fromLanguage := flag.String("from", "f", "Your default game language or 'auto' can be used.")
 	flag.Parse()
 
 	if *inputFileName == "" {
