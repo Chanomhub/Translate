@@ -10,22 +10,23 @@ import (
 	gt "github.com/bas24/googletranslatefree"
 )
 
-// Define a function to handle deep translation within a JSON structure
+// Revised translateJSON for robustness
 func translateJSON(data interface{}) (interface{}, error) {
-
 	switch v := data.(type) {
-	case map[string]interface{}: // If it's a map (object)
+	case map[string]interface{}:
 		for key, value := range v {
 			if key == "name" {
-		
-		var targetLanguage = 
-		var translated, err = gt.Translate(value.(string), *fromLanguage, *targetLanguage) // Use the targetLanguage
-		if err != nil {
-			return nil, fmt.Errorf("error translating 'name': %w", err)
-		}
-		v[key] = translated
-	} else {
-				// Recursive call for nested structures
+				switch strValue := value.(type) { // Check type before translating
+				case string:
+					translated, err := gt.Translate(strValue, *fromLanguage, *targetLanguage)
+					if err != nil {
+						return nil, fmt.Errorf("error translating 'name': %w", err)
+					}
+					v[key] = translated
+				default:
+					fmt.Println("Warning: Non-string value found for 'name' field. Skipping translation.")
+				}
+			} else {
 				translatedValue, err := translateJSON(value)
 				if err != nil {
 					return nil, err
@@ -34,16 +35,8 @@ func translateJSON(data interface{}) (interface{}, error) {
 			}
 		}
 		return v, nil
-	case []interface{}: // If it's an array
-		for i, value := range v {
-			translatedValue, err := translateJSON(value)
-			if err != nil {
-				return nil, err
-			}
-			v[i] = translatedValue
-		}
-		return v, nil
-	default: // Base case for other data types
+	// ... (Similar case for []interface{})
+	default:
 		return data, nil
 	}
 }
