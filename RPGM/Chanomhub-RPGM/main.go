@@ -12,11 +12,14 @@ import (
 
 // Define a function to handle deep translation within a JSON structure
 func translateJSON(data interface{}) (interface{}, error) {
+
 	switch v := data.(type) {
 	case map[string]interface{}: // If it's a map (object)
 		for key, value := range v {
 			if key == "name" {
-		translated, err := gt.Translate(value.(string), *fromLanguage, *targetLanguage) // Use the targetLanguage
+		
+		var targetLanguage = 
+		var translated, err = gt.Translate(value.(string), *fromLanguage, *targetLanguage) // Use the targetLanguage
 		if err != nil {
 			return nil, fmt.Errorf("error translating 'name': %w", err)
 		}
