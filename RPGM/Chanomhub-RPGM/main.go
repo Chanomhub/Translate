@@ -14,7 +14,7 @@ import (
 // Define a function to handle deep translation within JSON structures
 func translateJSON(data interface{}, sourceLang, targetLang string) (interface{}, error) {
 	switch v := data.(type) {
-	case map[string]interface{}: // If it's a map (object)
+	case map[string]interface{}: 
 		for key, value := range v {
 			translatedValue, err := translateJSON(value, sourceLang, targetLang)
 			if err != nil {
@@ -24,24 +24,26 @@ func translateJSON(data interface{}, sourceLang, targetLang string) (interface{}
 		}
 		return v, nil
 
-	case []interface{}: // If it's an array
+	case []interface{}: 
 		for i, value := range v {
-			translatedValue, err := translateJSON(value, sourceLang, targetLang)
-			if err != nil {
-				return nil, err
+			if value != nil { // Only attempt translation if not nil
+				translatedValue, err := translateJSON(value, sourceLang, targetLang)
+				if err != nil {
+					return nil, err
+				}
+				v[i] = translatedValue
 			}
-			v[i] = translatedValue
 		}
 		return v, nil
 
-	case string: // If it's a string we can translate directly
+	case string: 
 		translated, err := gt.Translate(v, sourceLang, targetLang)
 		if err != nil {
 			return nil, fmt.Errorf("error translating: %w", err)
 		}
 		return translated, nil
 
-	default: // Other data types can be passed through unchanged
+	default: 
 		return data, nil
 	}
 }
