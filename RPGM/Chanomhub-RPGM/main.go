@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -10,58 +11,55 @@ import (
 	gt "github.com/bas24/googletranslatefree"
 )
 
-var (
-	// Define flags for input and output file names
-	inputFileName  = flag.String("input", "", "Input JSON file name")
-	startLanguage  = flag.String("start", "auto", "Starting language (default: auto)")
-	targetLanguage = flag.String("target", "en", "Target language (default: en)")
-)
-
-// Define a function to handle deep translation within a JSON structure
-func translateJSON(data interface{}, startLang, targetLang string) (interface{}, error) {
+// Define a function to handle deep translation within JSON structures
+func translateJSON(data interface{}, sourceLang, targetLang string) (interface{}, error) {
 	switch v := data.(type) {
 	case map[string]interface{}: // If it's a map (object)
 		for key, value := range v {
-			if key == "name" {
-				translated, err := gt.Translate(value.(string), startLang, targetLang)
-				if err != nil {
-					return nil, fmt.Errorf("error translating 'name': %w", err)
-				}
-				v[key] = translated
-			} else {
-				// Recursive call for nested structures
-				translatedValue, err := translateJSON(value, startLang, targetLang)
-				if err != nil {
-					return nil, err
-				}
-				v[key] = translatedValue
+			translatedValue, err := translateJSON(value, sourceLang, targetLang)
+			if err != nil {
+				return nil, err
 			}
+			v[key] = translatedValue
 		}
 		return v, nil
+
 	case []interface{}: // If it's an array
 		for i, value := range v {
-			translatedValue, err := translateJSON(value, startLang, targetLang)
+			translatedValue, err := translateJSON(value, sourceLang, targetLang)
 			if err != nil {
 				return nil, err
 			}
 			v[i] = translatedValue
 		}
 		return v, nil
-	default: // Base case for other data types
+
+	case string: // If it's a string we can translate directly
+		translated, err := gt.Translate(v, sourceLang, targetLang)
+		if err != nil {
+			return nil, fmt.Errorf("error translating: %w", err)
+		}
+		return translated, nil
+
+	default: // Other data types can be passed through unchanged
 		return data, nil
 	}
 }
 
 func main() {
-	// Parse command line flags
+	// Define flags for input file, output file, source/target languages
+	inputFileName := flag.String("input", "", "Input JSON file name")
+	outputFileName := flag.String("output", "", "Output JSON file name")
+	sourceLang := flag.String("source", "auto", "Source language (use 'auto' for detection)")
+	targetLang := flag.String("target", "en", "Target language")
 	flag.Parse()
 
+	// Input/Output Logic
 	if *inputFileName == "" {
 		fmt.Println("Please provide an input file name using -input flag")
 		return
 	}
 
-	// Read the JSON from the file
 	jsonFile, err := os.Open(*inputFileName)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
@@ -75,7 +73,7 @@ func main() {
 		return
 	}
 
-	// Unmarshal the JSON
+	// Unmarshal the JSON data
 	var data interface{}
 	err = json.Unmarshal(jsonData, &data)
 	if err != nil {
@@ -83,29 +81,31 @@ func main() {
 		return
 	}
 
-	// Translate
-	translatedData, err := translateJSON(data, *startLanguage, *targetLanguage)
+	// Perform translation
+	translatedData, err := translateJSON(data, *sourceLang, *targetLang)
 	if err != nil {
 		fmt.Println("Error during translation:", err)
 		return
 	}
 
-	// Re-encode the updated JSON
+	// Marshal the translated data back into JSON
 	updatedJSON, err := json.MarshalIndent(translatedData, "", " ")
 	if err != nil {
 		fmt.Println("Error encoding JSON:", err)
 		return
 	}
 
-	// Get the output file name from the input file name
-	outputFileName := *inputFileName
+	// Get the output file or use input file as default
+	if *outputFileName == "" {
+		outputFileName = inputFileName
+	}
 
-	// Write back to the file (overwriting it)
-	err = ioutil.WriteFile(outputFileName, updatedJSON, 0644)
+	// Write the translated JSON back to the file
+	err = ioutil.WriteFile(*outputFileName, updatedJSON, 0644)
 	if err != nil {
 		fmt.Println("Error writing file:", err)
 		return
 	}
 
-	fmt.Println("Updated JSON saved to file:", outputFileName)
+	fmt.Println("Updated JSON saved to file:", *outputFileName)
 }
