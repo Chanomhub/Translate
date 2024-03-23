@@ -16,12 +16,12 @@ func translateJSON(data interface{}) (interface{}, error) {
 	case map[string]interface{}: // If it's a map (object)
 		for key, value := range v {
 			if key == "name" {
-				translated, err := gt.Translate(value.(string), "auto", "en")
-				if err != nil {
-					return nil, fmt.Errorf("error translating 'name': %w", err)
-				}
-				v[key] = translated
-			} else {
+		translated, err := gt.Translate(value.(string), *fromLanguage, *targetLanguage) // Use the targetLanguage
+		if err != nil {
+			return nil, fmt.Errorf("error translating 'name': %w", err)
+		}
+		v[key] = translated
+	} else {
 				// Recursive call for nested structures
 				translatedValue, err := translateJSON(value)
 				if err != nil {
@@ -46,12 +46,24 @@ func translateJSON(data interface{}) (interface{}, error) {
 }
 
 func main() {
-	// Define flags for input and output file names
-	inputFileName := flag.String("input", "", "Input JSON file name")
+	// Define flags for input file name and target language
+	inputFileName := flag.String("input", "i", "Input JSON file name")
+	targetLanguage := flag.String("target", "t", "Target language code (e.g., 'es' for Spanish, 'fr' for French)")
+        fromLanguage := flag.String("from", "f", "Your default game language or 'auto' can be used.")
 	flag.Parse()
 
 	if *inputFileName == "" {
-		fmt.Println("Please provide an input file name using -input flag")
+		fmt.Println("Please specify the file name for input using '-i' or '-input'.")
+		return
+	}
+
+	if *targetLanguage == "" {
+		fmt.Println("Please specify the target language using '-target' or '-t'.")
+		return
+	}
+
+	if *fromLanguage == "" {
+		fmt.Println("Please default language using '-f ' or '-from'.")
 		return
 	}
 
