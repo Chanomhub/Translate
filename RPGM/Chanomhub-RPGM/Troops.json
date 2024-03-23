@@ -1,0 +1,651 @@
+[
+ null,
+ {
+  "id": 1,
+  "members": [
+   {
+    "enemyId": 1,
+    "hidden": false,
+    "x": 408,
+    "y": 436
+   }
+  ],
+  "name": "Slime",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 2,
+  "members": [
+   {
+    "enemyId": 2,
+    "hidden": false,
+    "x": 408,
+    "y": 436
+   }
+  ],
+  "name": "oak",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 3,
+  "members": [
+   {
+    "enemyId": 3,
+    "hidden": false,
+    "x": 408,
+    "y": 436
+   }
+  ],
+  "name": "minotaur",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 4,
+  "members": [
+   {
+    "enemyId": 4,
+    "hidden": false,
+    "x": 408,
+    "y": 436
+   }
+  ],
+  "name": "Demon King",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 5,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 6,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 7,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 8,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 9,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 10,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 11,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 12,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 13,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 14,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 15,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 16,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 17,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 18,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 19,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ },
+ {
+  "id": 20,
+  "members": [],
+  "name": "",
+  "pages": [
+   {
+    "conditions": {
+     "actorHp": 50,
+     "actorId": 1,
+     "actorValid": false,
+     "enemyHp": 50,
+     "enemyIndex": 0,
+     "enemyValid": false,
+     "switchId": 1,
+     "switchValid": false,
+     "turnA": 0,
+     "turnB": 0,
+     "turnEnding": false,
+     "turnValid": false
+    },
+    "list": [
+     {
+      "code": 0,
+      "indent": 0,
+      "parameters": []
+     }
+    ],
+    "span": 0
+   }
+  ]
+ }
+]
