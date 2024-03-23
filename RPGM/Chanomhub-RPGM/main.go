@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -45,8 +46,17 @@ func translateJSON(data interface{}) (interface{}, error) {
 }
 
 func main() {
+	// Define flags for input and output file names
+	inputFileName := flag.String("input", "", "Input JSON file name")
+	flag.Parse()
+
+	if *inputFileName == "" {
+		fmt.Println("Please provide an input file name using -input flag")
+		return
+	}
+
 	// 1. Read the JSON from your file
-	jsonFile, err := os.Open("Troops.json")
+	jsonFile, err := os.Open(*inputFileName)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return
@@ -81,12 +91,15 @@ func main() {
 		return
 	}
 
+	// Get the output file name from the input file name
+	outputFileName := *inputFileName
+
 	// 5. Write back to the file (overwriting it)
-	err = ioutil.WriteFile("Troops.json", updatedJSON, 0644)
+	err = ioutil.WriteFile(outputFileName, updatedJSON, 0644)
 	if err != nil {
 		fmt.Println("Error writing file:", err)
 		return
 	}
 
-	fmt.Println("Updated JSON saved to file.")
+	fmt.Println("Updated JSON saved to file:", outputFileName)
 }
