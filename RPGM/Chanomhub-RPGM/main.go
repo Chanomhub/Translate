@@ -45,23 +45,14 @@ func translateJSON(data interface{}) (interface{}, error) {
 }
 
 func main() {
-	// 1. Read the JSON from your file
-	jsonFile, err := os.Open("Troops.json")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer jsonFile.Close()
-
-	jsonData, err := ioutil.ReadAll(jsonFile)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return
-	}
+	// 1. Get input file name from the user
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter the name of the JSON file: ")
+	inputFileName, _ := reader.ReadString('\n')
+	inputFileName = inputFileName[:len(inputFileName)-1] // Trim newline
 
 	// 2. Unmarshal the JSON
-	var data interface{}
-	err = json.Unmarshal(jsonData, &data)
+	jsonFile, err := os.Open(inputFileName)
 	if err != nil {
 		fmt.Println("Error decoding JSON:", err)
 		return
@@ -82,7 +73,8 @@ func main() {
 	}
 
 	// 5. Write back to the file (overwriting it)
-	err = ioutil.WriteFile("Troops.json", updatedJSON, 0644)
+	outputFileName := inputFileName
+	err = ioutil.WriteFile(outputFileName, updatedJSON, 0644)
 	if err != nil {
 		fmt.Println("Error writing file:", err)
 		return
