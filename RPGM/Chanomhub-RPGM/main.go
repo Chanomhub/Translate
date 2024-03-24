@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	gt "github.com/bas24/googletranslatefree"
+	gt "packages/translate"
 )
 
 // Define a function to handle deep translation within a JSON structure
