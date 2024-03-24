@@ -9,21 +9,28 @@ import (
 	"github.com/minio/simdjson-go"
 )
 
-// Target language for translations
-const targetLanguage = "th" // Replace 'es' if needed
+// RPGMakerTranslationError represents an error during translation of RPG Maker files
+type RPGMakerTranslationError struct {
+	FilePath string
+	Reason   string
+}
 
-// loadAndTranslateRPGMakerFile loads and translates an RPG Maker MZ JSON file.
-func loadAndTranslateRPGMakerFile(filePath string) error {
-	// 1. Load JSON using simdjson-go for efficiency
+func (e RPGMakerTranslationError) Error() string {
+	return fmt.Sprintf("RPG Maker translation error in '%s': %s", e.FilePath, e.Reason)
+}
+
+// translateRPGMakerFile translates text elements within an RPG Maker MZ JSON file.
+func translateRPGMakerFile(filePath string, targetLanguage string) error {
+	// 1. Efficient JSON Loading with SIMDJSON-go
 	data, err := simdjson.Load(filePath)
 	if err != nil {
-		return fmt.Errorf("failed to load JSON: %w", err)
+		return RPGMakerTranslationError{FilePath: filePath, Reason: "Error loading JSON: " + err.Error()}
 	}
 
-	// 2. Iterate and translate text elements
+	// 2. Iterate and Translate
 	iter := data.Iter()
 	for {
-		// ... (Extract translatable text based on RPG Maker MZ structure)
+		// ... (Logic to identify translatable strings in the structure)
 
 		if !iter.Advance() {
 			break
@@ -31,30 +38,43 @@ func loadAndTranslateRPGMakerFile(filePath string) error {
 
 		originalText := iter.String()
 
+		// 3. Translation with Error Handling
 		translatedText, err := gt.Translate(originalText, "auto", targetLanguage)
 		if err != nil {
-			return fmt.Errorf("translation failed: %w", err)
+			return RPGMakerTranslationError{FilePath: filePath, Reason: "Translation error: " + err.Error()}
 		}
 
-		// ... (Modify in-memory JSON using simdjson-go)
+		// 4. Modify the JSON structure (implementation depends on your RPG Maker format)
 	}
 
-	// 5. Save the translated JSON (consider backup options)
-	if err := ioutil.WriteFile(filePath, data.MarshalJSON(), 0644); err != nil {
-		return fmt.Errorf("failed to save JSON: %w", err)
+	// 5. Save Modified JSON (consider overwriting the original or creating a new file)
+	updatedJSON, err := data.MarshalJSON()
+	if err != nil {
+		return RPGMakerTranslationError{FilePath: filePath, Reason: "Failed to serialize JSON: " + err.Error()}
+	}
+
+	err = ioutil.WriteFile(filePath, updatedJSON, 0644) // Adjust file permissions as needed
+	if err != nil {
+		return RPGMakerTranslationError{FilePath: filePath, Reason: "Failed to save JSON: " + err.Error()}
 	}
 
 	return nil
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: rpkmz_translator <file.json>")
+	if len(os.Args) < 3 {
+		fmt.Println("Usage: rpgm_translator <RPG Maker JSON file> <target language code>")
 		return
 	}
 
 	filePath := os.Args[1]
-	if err := loadAndTranslateRPGMakerFile(filePath); err != nil {
+	targetLanguage := os.Args[2]
+
+	err := translateRPGMakerFile(filePath, targetLanguage)
+	if err != nil {
 		fmt.Println(err)
+		return
 	}
+
+	fmt.Println("RPG Maker file translated successfully!")
 }
