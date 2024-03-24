@@ -122,4 +122,4 @@ func translateAndUpdateNames(enemies []EnemyData, targetLang string) {
 			}
 		}
 	}
-}
+};
