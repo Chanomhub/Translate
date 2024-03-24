@@ -10,6 +10,17 @@ import (
 )
 
 
+func saveJSON(jsonData interface{}, filename string) error {
+  data, err := json.MarshalIndent(jsonData, "", "  ")
+  if err != nil {
+    return err
+  }
+  err = ioutil.WriteFile(filename, data, 0644)
+  if err != nil {
+    return err
+  }
+  return nil
+}
 
 func readJSON(filename string) (interface{}, error) {
     data, err := ioutil.ReadFile(filename)
@@ -72,26 +83,23 @@ func translateText(text string, targetLang string) (string, error) {
 
 
 func main() {
-    filename := "your_json_file.json"
-    targetLang := "en" // ตั้งค่าเป็นภาษาที่ต้องการแปลเป็น
+   filename := "your_json_file.json"
+targetLang := "en"
 
-    jsonData, err := readJSON(filename)
-    if err != nil {
-        fmt.Println("Error reading JSON:", err)
-        os.Exit(1)
-    }
+jsonData, err := readJSON(filename)
+if err != nil {
+  fmt.Println("Error reading JSON:", err)
+  os.Exit(1)
+}
 
-    // ทำการแปลภาษาทุกข้อความใน JSON
-    // (ต้องทำการ iterate ทุกๆ ข้อมูลและแปลแยกทีละข้อความ)
-    translatedData := translateAll(jsonData, targetLang)
+translatedData := translateAll(jsonData, targetLang)
 
-    // บันทึกผลลัพธ์ที่แปลแล้วลงในไฟล์
-    // (ใช้วิธีการ serialize โครงสร้างข้อมูลกลับเป็น JSON หลังจากแปลแล้ว)
-    err = saveJSON(translatedData, "translated.json")
-    if err != nil {
-        fmt.Println("Error saving translated JSON:", err)
-        os.Exit(1)
-    }
+err = saveJSON(translatedData, "translated.json")
+if err != nil {
+  fmt.Println("Error saving translated JSON:", err)
+  os.Exit(1)
+}
 
-    fmt.Println("Translation completed and saved to translated.json")
+fmt.Println("Translation completed and saved to translated.json")
+
 }
