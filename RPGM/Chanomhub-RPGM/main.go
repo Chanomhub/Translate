@@ -10,6 +10,7 @@ import (
 	gt "github.com/bas24/googletranslatefree"
 )
 
+// Define structs for EnemyData and Timings
 type EnemyData struct {
 	ID             int        `json:"id"`
 	Animation1Hue  int        `json:"animation1Hue"`
@@ -44,7 +45,7 @@ var structMap = map[string]interface{}{
 }
 
 func main() {
-	// Command-line flags
+	// Parse command-line flags
 	filePath := flag.String("file", "", "Path to the input JSON file")
 	targetLang := flag.String("lang", "th", "Target language code (e.g., 'th' for Thai)")
 	flag.Parse()
@@ -55,55 +56,63 @@ func main() {
 		return
 	}
 
-	// Load the JSON file
-	enemies, err := loadJSONFile(*filePath)
+	// Load and process JSON file
+	err := processJSONFile(*filePath, *targetLang)
 	if err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("Error processing JSON file:", err)
 		return
 	}
 
-	// Translate and update names if applicable
-	err = translateAndUpdateNames(enemies, *targetLang)
-	if err != nil {
-		fmt.Println("Translation error:", err)
-		return
-	}
-
-	// Save the modified JSON
-	outputFilePath := filepath.Join("output", filepath.Base(*filePath))
-	err = saveJSON(outputFilePath, enemies)
-	if err != nil {
-		fmt.Println("Error saving file:", err)
-		return
-	}
-
-	fmt.Println("Translation complete! Results saved to:", outputFilePath)
+	fmt.Println("Translation complete!")
 }
 
-// Function to load JSON file
-func loadJSONFile(filePath string) ([]EnemyData, error) {
+// Function to load and process JSON file
+func processJSONFile(filePath, targetLang string) error {
+	// Read the JSON file
 	jsonData, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, fmt.Errorf("error reading file: %w", err)
+		return fmt.Errorf("error reading file: %w", err)
 	}
 
 	// Determine the struct type based on the file name
 	structType, ok := structMap[filepath.Base(filePath)]
 	if !ok {
-		return nil, fmt.Errorf("unsupported file type")
+		return fmt.Errorf("unsupported file type")
 	}
 
 	// Unmarshal (decode) the JSON into the appropriate struct type
 	err = json.Unmarshal(jsonData, &structType)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing JSON: %w", err)
+		return fmt.Errorf("error parsing JSON: %w", err)
 	}
 
+	// Translate and update names if applicable
 	if enemies, ok := structType.([]EnemyData); ok {
-		return enemies, nil
+		err := translateAndUpdateNames(enemies, targetLang)
+		if err != nil {
+			return fmt.Errorf("error translating names: %w", err)
+		}
 	}
 
-	return nil, fmt.Errorf("unexpected struct type")
+	// Determine output file name
+	outputDir := filepath.Join(".", "output")
+	baseFileName := filepath.Base(filePath)
+	outputFilePath := filepath.Join(outputDir, baseFileName)
+
+	// Marshal (encode) back into JSON
+	updatedJSON, err := json.MarshalIndent(structType, "", " ")
+	if err != nil {
+		return fmt.Errorf("error encoding JSON: %w", err)
+	}
+
+	// Save the modified JSON
+	err = os.WriteFile(outputFilePath, updatedJSON, 0644)
+	if err != nil {
+		return fmt.Errorf("error writing file: %w", err)
+	}
+
+	fmt.Println("Results saved to:", outputFilePath)
+	return nil
 }
 
 // Function to translate and update names
@@ -117,20 +126,5 @@ func translateAndUpdateNames(enemies []EnemyData, targetLang string) error {
 			enemies[i].Name = translatedText
 		}
 	}
-	return nil
-}
-
-// Function to save JSON to file
-func saveJSON(filePath string, data interface{}) error {
-	updatedJSON, err := json.MarshalIndent(data, "", " ")
-	if err != nil {
-		return fmt.Errorf("error encoding JSON: %w", err)
-	}
-
-	err = os.WriteFile(filePath, updatedJSON, 0644)
-	if err != nil {
-		return fmt.Errorf("error writing file: %w", err)
-	}
-
 	return nil
 }
