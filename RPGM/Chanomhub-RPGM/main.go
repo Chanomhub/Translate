@@ -4,71 +4,105 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
 
-	gt "github.com/bas24/googletranslatefree"
+	"github.com/bas24/googletranslatefree"
 	"github.com/minio/simdjson-go"
 )
 
-// Function to perform the translation
-func translateText(text, sourceLang, targetLang string) (string, error) {
-	return gt.Translate(text, sourceLang, targetLang)
+// JSONData represents the structure of your JSON data
+type JSONData struct {
+	// Define fields of your JSON data structure
+	// For example:
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 func main() {
-	// --- Example Usage ---
+	const inputFilePath = "input.json"
+	const outputFolder = "translated_json"
 
-	// 1. Read original JSON file
-	originalData, err := ioutil.ReadFile("input.json")
+	// Read JSON data from file
+	jsonData, err := readJSONFile(inputFilePath)
 	if err != nil {
-		fmt.Println("Error reading input JSON:", err)
+		fmt.Println("Error reading JSON file:", err)
 		return
 	}
 
-	// 2. Parse the JSON data (using simdjson-go)
-	parsed, err := simdjson.Parse(originalData, nil)
+	// Translate JSON data
+	translatedData := translateJSON(jsonData, "en", "es")
+
+	// Export translated JSON data
+	outputFileName := strings.TrimSuffix(inputFilePath, filepath.Ext(inputFilePath)) + "_translated.json"
+	outputFilePath := filepath.Join(outputFolder, outputFileName)
+	err = exportJSON(translatedData, outputFilePath)
 	if err != nil {
-		fmt.Println("Error parsing JSON:", err)
+		fmt.Println("Error exporting translated JSON data:", err)
 		return
 	}
 
-	// 3. Iterate and translate specified fields
-	iter := parsed.Iter()
-	for {
-		typ := iter.Advance()
-		switch typ {
-		case simdjson.TypeObject:
-			obj, _ := iter.Object(nil)
-			objIter := obj.Iter()
-		FIELD_LOOP:
-			for {
-				field := objIter.Advance()
-				switch field {
-				case simdjson.TypeString("title"): // Specify the field to translate
-					str, _ := objIter.StringBytes()
-					translated, err := translateText(string(str), "en", "es") // Example translation
-					if err != nil {
-						fmt.Println("Translation error:", err)
-					} else {
-						iter.DelField()          // Remove the original field
-						iter.AddString(field, translated) // Add the translated field
-					}
-				default:
-					break FIELD_LOOP // Skip other fields
-				}
-			}
-		default:
-			// Handle other JSON types if needed
-		}
-	}
+	fmt.Println("Translated JSON data exported to:", outputFilePath)
+}
 
-	// 4. Write the modified JSON to a new file
-	outputFilename := "output_es.json" // Use language code for clarity
-	outputData := parsed.MarshalJSON()
-	err = ioutil.WriteFile(outputFilename, outputData, 0644)
+// readJSONFile reads JSON data from a file
+func readJSONFile(filePath string) (JSONData, error) {
+	var data JSONData
+
+	file, err := os.Open(filePath)
 	if err != nil {
-		fmt.Println("Error writing output JSON:", err)
-		return
+		return data, err
+	}
+	defer file.Close()
+
+	// Parse JSON data using simdjson-go
+	parsedData, err := simdjson.Parse(file, nil)
+	if err != nil {
+		return data, err
 	}
 
-	fmt.Println("Translation and JSON export complete!")
+	// Map parsed JSON data to struct
+	err = parsedData.Unmarshal(&data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+// translateJSON translates specified fields of JSON data
+func translateJSON(data JSONData, sourceLang, targetLang string) JSONData {
+	// Translate specified fields (e.g., Title, Description)
+	translatedTitle, _ := googletranslatefree.Translate(data.Title, sourceLang, targetLang)
+	translatedDescription, _ := googletranslatefree.Translate(data.Description, sourceLang, targetLang)
+
+	// Return translated JSON data
+	return JSONData{
+		Title:       translatedTitle,
+		Description: translatedDescription,
+		// Add other fields as needed
+	}
+}
+
+// exportJSON exports JSON data to a file
+func exportJSON(data JSONData, filePath string) error {
+	// Create output folder if not exists
+	err := os.MkdirAll(filepath.Dir(filePath), 0755)
+	if err != nil {
+		return err
+	}
+
+	// Marshal JSON data
+	jsonBytes, err := simdjson.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	// Write JSON data to file
+	err = ioutil.WriteFile(filePath, jsonBytes, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
