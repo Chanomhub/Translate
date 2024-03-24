@@ -10,26 +10,13 @@ import (
 	gt "github.com/bas24/googletranslatefree"
 )
 
-var (
-	sourceLang string
-	targetLang string
-)
-
 // Define a function to handle deep translation within a JSON structure
 func translateJSON(data interface{}) (interface{}, error) {
 	switch v := data.(type) {
 	case map[string]interface{}: // If it's a map (object)
 		for key, value := range v {
-			if value == nil {
-				continue // Skip translation if the value is nil
-			}
 			if key == "name" {
-				strVal, ok := value.(string)
-				if !ok {
-					// Value is not a string, skip translation
-					continue
-				}
-				translated, err := gt.Translate(strVal, sourceLang, targetLang)
+				translated, err := gt.Translate(value.(string), "auto", "en")
 				if err != nil {
 					return nil, fmt.Errorf("error translating 'name': %w", err)
 				}
@@ -46,9 +33,6 @@ func translateJSON(data interface{}) (interface{}, error) {
 		return v, nil
 	case []interface{}: // If it's an array
 		for i, value := range v {
-			if value == nil {
-				continue // Skip translation if the value is nil
-			}
 			translatedValue, err := translateJSON(value)
 			if err != nil {
 				return nil, err
@@ -61,13 +45,9 @@ func translateJSON(data interface{}) (interface{}, error) {
 	}
 }
 
-
-
 func main() {
 	// Define flags for input and output file names
 	inputFileName := flag.String("input", "", "Input JSON file name")
-	flag.StringVar(&sourceLang, "source", "auto", "Source language for translation")
-	flag.StringVar(&targetLang, "target", "en", "Target language for translation")
 	flag.Parse()
 
 	if *inputFileName == "" {
