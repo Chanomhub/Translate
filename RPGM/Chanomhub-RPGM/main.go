@@ -10,7 +10,7 @@ import (
 )
 
 // Target language for translations
-const targetLanguage = "es" // Replace 'es' if needed
+const targetLanguage = "th" // Replace 'es' if needed
 
 // loadAndTranslateRPGMakerFile loads and translates an RPG Maker MZ JSON file.
 func loadAndTranslateRPGMakerFile(filePath string) error {
