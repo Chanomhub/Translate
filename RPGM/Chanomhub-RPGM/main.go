@@ -46,6 +46,9 @@ func translateJSON(data interface{}) (interface{}, error) {
 		return v, nil
 	case []interface{}: // If it's an array
 		for i, value := range v {
+			if value == nil {
+				continue // Skip translation if the value is nil
+			}
 			translatedValue, err := translateJSON(value)
 			if err != nil {
 				return nil, err
@@ -57,6 +60,7 @@ func translateJSON(data interface{}) (interface{}, error) {
 		return data, nil
 	}
 }
+
 
 
 func main() {
