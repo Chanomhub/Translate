@@ -11,19 +11,19 @@ import (
 )
 
 // Define a function to handle deep translation within a JSON structure
-func translateJSON(data interface{}) (interface{}, error) {
+func translateJSON(data interface{}, targetLang string) (interface{}, error) {
 	switch v := data.(type) {
 	case map[string]interface{}: // If it's a map (object)
 		for key, value := range v {
 			if key == "name" {
-				translated, err := gt.Translate(value.(string), "auto", "en")
+				translated, err := gt.Translate(value.(string), "auto", targetLang)
 				if err != nil {
 					return nil, fmt.Errorf("error translating 'name': %w", err)
 				}
 				v[key] = translated
 			} else {
 				// Recursive call for nested structures
-				translatedValue, err := translateJSON(value)
+				translatedValue, err := translateJSON(value, targetLang)
 				if err != nil {
 					return nil, err
 				}
@@ -33,7 +33,7 @@ func translateJSON(data interface{}) (interface{}, error) {
 		return v, nil
 	case []interface{}: // If it's an array
 		for i, value := range v {
-			translatedValue, err := translateJSON(value)
+			translatedValue, err := translateJSON(value, targetLang)
 			if err != nil {
 				return nil, err
 			}
@@ -48,6 +48,7 @@ func translateJSON(data interface{}) (interface{}, error) {
 func main() {
 	// Define flags for input and output file names
 	inputFileName := flag.String("input", "", "Input JSON file name")
+	language := flag.String("lang", "en", "Target language for translation")
 	flag.Parse()
 
 	if *inputFileName == "" {
@@ -55,7 +56,7 @@ func main() {
 		return
 	}
 
-	// 1. Read the JSON from your file
+	// Read the JSON from your file
 	jsonFile, err := os.Open(*inputFileName)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
@@ -69,7 +70,7 @@ func main() {
 		return
 	}
 
-	// 2. Unmarshal the JSON
+	// Unmarshal the JSON
 	var data interface{}
 	err = json.Unmarshal(jsonData, &data)
 	if err != nil {
@@ -77,14 +78,14 @@ func main() {
 		return
 	}
 
-	// 3. Translate
-	translatedData, err := translateJSON(data)
+	// Translate
+	translatedData, err := translateJSON(data, *language)
 	if err != nil {
 		fmt.Println("Error during translation:", err)
 		return
 	}
 
-	// 4. Re-encode the updated JSON
+	// Re-encode the updated JSON
 	updatedJSON, err := json.MarshalIndent(translatedData, "", " ")
 	if err != nil {
 		fmt.Println("Error encoding JSON:", err)
@@ -94,7 +95,7 @@ func main() {
 	// Get the output file name from the input file name
 	outputFileName := *inputFileName
 
-	// 5. Write back to the file (overwriting it)
+	// Write back to the file (overwriting it)
 	err = ioutil.WriteFile(outputFileName, updatedJSON, 0644)
 	if err != nil {
 		fmt.Println("Error writing file:", err)
