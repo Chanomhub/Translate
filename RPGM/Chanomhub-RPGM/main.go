@@ -1,50 +1,71 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"os"
+    "fmt"
+    "io/ioutil"
+    "os"
 
-	gt "github.com/bas24/googletranslatefree"
-	"github.com/minio/simdjson-go"
+    "github.com/minio/simdjson-go"
+    "github.com/Conight/go-googletrans"
 )
 
+
+
+func readJSON(filename string) (interface{}, error) {
+    data, err := ioutil.ReadFile(filename)
+    if err != nil {
+        return nil, err
+    }
+
+    p := simdjson.NewParser()
+    parsed, err := p.Parse(data, nil)
+    if err != nil {
+        return nil, err
+    }
+
+    var jsonData interface{}
+    err = parsed.Unmarshal(&jsonData)
+    if err != nil {
+        return nil, err
+    }
+
+    return jsonData, nil
+}
+
+
+func translateText(text string, targetLang string) (string, error) {
+    translator := googletrans.NewTranslator()
+    translatedText, err := translator.Translate(text, targetLang, "auto")
+    if err != nil {
+        return "", err
+    }
+
+    return translatedText, nil
+}
+
+
+
 func main() {
-	jsonFile, err := os.Open("your_rpg_maker_file.json")
-	if err != nil {
-		fmt.Println("Error opening JSON file:", err)
-		return
-	}
-	defer jsonFile.Close()
+    filename := "your_json_file.json"
+    targetLang := "en" // ตั้งค่าเป็นภาษาที่ต้องการแปลเป็น
 
-	byteData, _ := ioutil.ReadAll(jsonFile)
+    jsonData, err := readJSON(filename)
+    if err != nil {
+        fmt.Println("Error reading JSON:", err)
+        os.Exit(1)
+    }
 
-	// Fast JSON Parsing
-	parsed, err := simdjson.Parse(byteData, nil)
-	if err != nil {
-		fmt.Println("Error parsing JSON:", err)
-		return
-	}
+    // ทำการแปลภาษาทุกข้อความใน JSON
+    // (ต้องทำการ iterate ทุกๆ ข้อมูลและแปลแยกทีละข้อความ)
+    translatedData := translateAll(jsonData, targetLang)
 
-	// Find text elements to translate (adjust selectors as needed)
-	elementsToTranslate, _ := parsed.Find("dialog", "text")
+    // บันทึกผลลัพธ์ที่แปลแล้วลงในไฟล์
+    // (ใช้วิธีการ serialize โครงสร้างข้อมูลกลับเป็น JSON หลังจากแปลแล้ว)
+    err = saveJSON(translatedData, "translated.json")
+    if err != nil {
+        fmt.Println("Error saving translated JSON:", err)
+        os.Exit(1)
+    }
 
-	for _, element := range elementsToTranslate.Iter() {
-		originalText := element.String()
-
-		translatedText, err := gt.Translate(originalText, "auto", "es") // Translate to Spanish
-		if err != nil {
-			fmt.Println("Translation error:", err)
-		} else {
-			element.SetString(translatedText) // Replace text in parsed JSON
-		}
-	}
-
-	// Overwrite the original file (or save a new one)
-	updatedJSON, _ := parsed.MarshalJSON()
-	err = ioutil.WriteFile("your_rpg_maker_file_translated.json", updatedJSON, 0644)
-	if err != nil {
-		fmt.Println("Error writing translated file:", err)
-	}
+    fmt.Println("Translation completed and saved to translated.json")
 }
