@@ -116,7 +116,7 @@ func translateAndUpdateNames(enemies []EnemyData, targetLang string) {
 		if enemies[i].Name != "" {
 			translatedText, err := gt.Translate(enemies[i].Name, "auto", targetLang)
 			if err != nil {
-				fmt.Println("Translation error:", err)
+				fmt.Println("Translation error for enemy", enemies[i].Name, ":", err)
 			} else {
 				enemies[i].Name = translatedText
 			}
