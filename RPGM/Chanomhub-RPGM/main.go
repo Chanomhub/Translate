@@ -96,10 +96,12 @@ func translateJSON(parsed *simdjson.ParsedJson, keys []string, targetLanguage st
 
 			translatedText, err := gt.Translate(value, "auto", targetLanguage)
 if err != nil {
-	// Handle translation error here (e.g., log the error, skip the key)
+	// Handle translation error here (e.g., log the error, skip translation)
 	fmt.Printf("Error translating key '%s': %v\n", key, err)
-	continue // Skip to the next key in the loop
+	// You can choose to skip translation for this key or continue translating others
+	continue
 }
+
 
 
 			// Update JSON in-place using simdjson-go (implementation omitted for brevity)
