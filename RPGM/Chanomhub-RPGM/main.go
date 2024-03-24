@@ -10,8 +10,13 @@ import (
 	gt "github.com/bas24/googletranslatefree"
 )
 
+var (
+	sourceLang string
+	targetLang string
+)
+
 // Define a function to handle deep translation within a JSON structure
-func translateJSON(data interface{}, sourceLang, targetLang string) (interface{}, error) {
+func translateJSON(data interface{}) (interface{}, error) {
 	switch v := data.(type) {
 	case map[string]interface{}: // If it's a map (object)
 		for key, value := range v {
@@ -23,7 +28,7 @@ func translateJSON(data interface{}, sourceLang, targetLang string) (interface{}
 				v[key] = translated
 			} else {
 				// Recursive call for nested structures
-				translatedValue, err := translateJSON(value, sourceLang, targetLang)
+				translatedValue, err := translateJSON(value)
 				if err != nil {
 					return nil, err
 				}
@@ -33,7 +38,7 @@ func translateJSON(data interface{}, sourceLang, targetLang string) (interface{}
 		return v, nil
 	case []interface{}: // If it's an array
 		for i, value := range v {
-			translatedValue, err := translateJSON(value, sourceLang, targetLang)
+			translatedValue, err := translateJSON(value)
 			if err != nil {
 				return nil, err
 			}
@@ -46,10 +51,10 @@ func translateJSON(data interface{}, sourceLang, targetLang string) (interface{}
 }
 
 func main() {
-	// Define flags for input, output file names, source, and target languages
+	// Define flags for input and output file names
 	inputFileName := flag.String("input", "", "Input JSON file name")
-	sourceLang := flag.String("sourceLang", "auto", "Source language")
-	targetLang := flag.String("targetLang", "en", "Target language")
+	flag.StringVar(&sourceLang, "source", "auto", "Source language for translation")
+	flag.StringVar(&targetLang, "target", "en", "Target language for translation")
 	flag.Parse()
 
 	if *inputFileName == "" {
@@ -80,7 +85,7 @@ func main() {
 	}
 
 	// 3. Translate
-	translatedData, err := translateJSON(data, *sourceLang, *targetLang)
+	translatedData, err := translateJSON(data)
 	if err != nil {
 		fmt.Println("Error during translation:", err)
 		return
