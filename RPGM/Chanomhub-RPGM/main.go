@@ -24,7 +24,12 @@ func translateJSON(data interface{}) (interface{}, error) {
 				continue // Skip translation if the value is nil
 			}
 			if key == "name" {
-				translated, err := gt.Translate(value.(string), sourceLang, targetLang)
+				strVal, ok := value.(string)
+				if !ok {
+					// Value is not a string, skip translation
+					continue
+				}
+				translated, err := gt.Translate(strVal, sourceLang, targetLang)
 				if err != nil {
 					return nil, fmt.Errorf("error translating 'name': %w", err)
 				}
