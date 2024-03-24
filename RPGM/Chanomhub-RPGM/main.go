@@ -2,20 +2,21 @@ package main
 
 import (
 	"encoding/json"
-	"flag" // For command-line flags
+	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	gt "github.com/bas24/googletranslatefree"
 )
 
 // Define a custom struct to mirror the JSON data
 type EnemyData struct {
-	ID      int        `json:"id"`
-	Members []struct { // ... (other fields if needed)
+	ID      int `json:"id"`
+	Members []struct {
 	} `json:"members"`
-	Name  string     `json:"name"`
-	Pages []struct { // ...
+	Name  string `json:"name"`
+	Pages []struct {
 	} `json:"pages"`
 }
 
@@ -58,19 +59,31 @@ func main() {
 		}
 	}
 
+	// Create a new directory for output files
+	outputDir := filepath.Join(".", "output")
+	err = os.MkdirAll(outputDir, 0755)
+	if err != nil {
+		fmt.Println("Error creating output directory:", err)
+		return
+	}
+
+	// Determine output file name
+	baseFileName := filepath.Base(*filePath)
+	outputFilePath := filepath.Join(outputDir, baseFileName)
+
 	// Marshal (encode) back into JSON
-	updatedJSON, err := json.MarshalIndent(enemies, "", "  ") // Indentation for readability
+	updatedJSON, err := json.MarshalIndent(enemies, "", " ")
 	if err != nil {
 		fmt.Println("Error encoding JSON:", err)
 		return
 	}
 
-	// Save the modified JSON (you can choose a different output file name)
-	err = os.WriteFile("translated_output.json", updatedJSON, 0644)
+	// Save the modified JSON
+	err = os.WriteFile(outputFilePath, updatedJSON, 0644)
 	if err != nil {
 		fmt.Println("Error writing file:", err)
 		return
 	}
 
-	fmt.Println("Translation complete! Results saved")
+	fmt.Println("Translation complete! Results saved to:", outputFilePath)
 }
