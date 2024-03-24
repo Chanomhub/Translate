@@ -6,10 +6,11 @@ toml
 watchdog==0.10.3
 flake8==3.8.3
 coverage==5.2.1
-Sphinx==3.2.1
+Sphinx==3.3.0
 twine==3.2.0
 Click==7.1.2
 pytest==6.0.1
 pytest-runner==5.2
 sphinx-copybutton==0.3.1
 importlib-metadata==1.6.0
+setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
