@@ -20,6 +20,9 @@ func translateJSON(data interface{}) (interface{}, error) {
 	switch v := data.(type) {
 	case map[string]interface{}: // If it's a map (object)
 		for key, value := range v {
+			if value == nil {
+				continue // Skip translation if the value is nil
+			}
 			if key == "name" {
 				translated, err := gt.Translate(value.(string), sourceLang, targetLang)
 				if err != nil {
@@ -49,6 +52,7 @@ func translateJSON(data interface{}) (interface{}, error) {
 		return data, nil
 	}
 }
+
 
 func main() {
 	// Define flags for input and output file names
