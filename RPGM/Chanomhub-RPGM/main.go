@@ -37,28 +37,43 @@ func main() {
 
 	// 2. Iterate and Translate
 	iter := pj.Iter()
-	for {
-		typ := iter.Advance()
-		if typ == simdjson.TypeNone {
-			break // End of the object
-		}
+	var key string 
+	typ := iter.Advance()
 
-		key, _ := iter.ObjectElementKey()
-		shouldTranslate := contains(translateKeys, string(key))
-
-		if shouldTranslate {
-			if iter.Type() == simdjson.TypeString {
-				originalValue, _ := iter.StringBytes()
-				translated, err := gt.Translate(string(originalValue), sourceLang, targetLang)
-				if err != nil {
-					fmt.Println("Translation error:", err)
-				} else {
-					iter.ReplaceString(translated)
+	for typ != simdjson.TypeNone {
+		switch typ {
+		case simdjson.TypeObject:
+			obj, _ := iter.Object()
+			for {
+				typ := obj.Advance()
+				if typ == simdjson.TypeNone {
+					break
 				}
-			} else {
-				fmt.Println("Cannot translate non-string value for key:", key)
+
+				if typ == simdjson.TypeString { 
+					field, _ := obj.StringBytes()
+					key = string(field)
+				} else {
+					key = "" // Reset key if not a string field
+				}
+
+				if typ == simdjson.TypeString && contains(translateKeys, key) {
+					val, _ := obj.StringBytes()
+					translated, err := gt.Translate(string(val), sourceLang, targetLang)
+					if err != nil {
+						fmt.Println("Translation error:", err)
+					} else {
+						obj.SetString(translated) // Replace in the object
+					}
+				}
 			}
+
+		default:
+			// Handle other types if needed
+			fmt.Println("Skipping type:", typ)
 		}
+
+		typ = iter.Advance()
 	}
 
 	// 3. Create output directory if needed
