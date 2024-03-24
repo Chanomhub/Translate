@@ -31,17 +31,43 @@ func readJSON(filename string) (interface{}, error) {
 
     return jsonData, nil
 }
+func translateAll(jsonData interface{}, targetLang string) interface{} {
+  switch jsonData.(type) {
+  case string:
+    translatedText, err := translateText(jsonData.(string), targetLang)
+    if err != nil {
+      fmt.Println("Error translating text:", err)
+      os.Exit(1)
+    }
+    return translatedText
+  case map[string]interface{}:
+    translatedMap := make(map[string]interface{})
+    for key, value := range jsonData.(map[string]interface{}) {
+      translatedMap[key] = translateAll(value, targetLang)
+    }
+    return translatedMap
+  case []interface{}:
+    translatedSlice := make([]interface{}, len(jsonData.([]interface{})))
+    for i, value := range jsonData.([]interface{}) {
+      translatedSlice[i] = translateAll(value, targetLang)
+    }
+    return translatedSlice
+  default:
+    return jsonData
+  }
+}
+
 
 
 func translateText(text string, targetLang string) (string, error) {
-    translator := googletrans.NewTranslator()
-    translatedText, err := translator.Translate(text, targetLang, "auto")
-    if err != nil {
-        return "", err
-    }
-
-    return translatedText, nil
+  t := translator.New()
+  result, err := t.Translate(text, targetLang, "auto")
+  if err != nil {
+    return "", err
+  }
+  return result.Text, nil
 }
+
 
 
 
