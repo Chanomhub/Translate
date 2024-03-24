@@ -1,72 +1,76 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"flag"
-	gt "github.com/bas24/googletranslatefree"
-	"io/ioutil"
-	"os"
+    "encoding/json"
+    "fmt"
+    "os"
+    "flag" // For command-line flags
+
+    gt "github.com/bas24/googletranslatefree"
 )
 
+// Define a custom struct to mirror the JSON data
+type EnemyData struct {
+    ID      int      `json:"id"`
+    Members []struct { // ... (other fields if needed)
+    } `json:"members"`
+    Name    string   `json:"name"`
+    Pages   []struct { // ...
+    } `json:"pages"` 
+}
+
 func main() {
-	// ตั้งค่า flag
-	inputPath := flag.String("input", "", "Path to the input JSON file")
-	outputPath := flag.String("output", "", "Path to the output JSON file")
-	sourceLang := flag.String("source", "auto", "Source language code")
-	targetLang := flag.String("target", "en", "Target language code")
-	flag.Parse()
+    // Command-line flags
+    filePath := flag.String("file", "", "Path to the input JSON file")
+    targetLang := flag.String("lang", "es", "Target language code (e.g., 'es' for Spanish)")
+    flag.Parse()
 
-	// ตรวจสอบ flag
-	if *inputPath == "" || *outputPath == "" {
-		fmt.Println("Usage: go run translate.go -input <input.json> -output <output.json> -source <source_lang> -target <target_lang>")
-		return
-	}
+    // Error handling for flags
+    if *filePath == "" {
+        fmt.Println("Error: Please provide a file path using the -file flag")
+        return 
+    }
 
-	// อ่านไฟล์ JSON
-	data, err := ioutil.ReadFile(*inputPath)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+    // Load the JSON file
+    jsonData, err := os.ReadFile(*filePath)
+    if err != nil {
+        fmt.Println("Error reading file:", err)
+        return
+    }
 
-	// แปลง JSON เป็น map
-	var jsonData map[string]interface{}
-	err = json.Unmarshal(data, &jsonData)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+    // Unmarshal (decode) the JSON into an array of EnemyData structs
+    var enemies []EnemyData
+    err = json.Unmarshal(jsonData, &enemies)
+    if err != nil {
+        fmt.Println("Error parsing JSON:", err)
+        return
+    }
 
-	// ดึงข้อมูล name
-	name, ok := jsonData["name"]
-	if !ok {
-		fmt.Println("No 'name' field found in the JSON file")
-		return
-	}
+    // Translate and update names
+    for i := range enemies {
+        if enemies[i].Name != "" {
+            translatedText, err := gt.Translate(enemies[i].Name, "en", *targetLang) 
+            if err != nil {
+                fmt.Println("Translation error:", err)
+            } else {
+                enemies[i].Name = translatedText
+            }
+        }
+    }
 
-	// แปลภาษา
-	translatedText, err := gt.Translate(name.(string), *sourceLang, *targetLang)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+    // Marshal (encode) back into JSON
+    updatedJSON, err := json.MarshalIndent(enemies, "", "  ") // Indentation for readability
+    if err != nil {
+        fmt.Println("Error encoding JSON:", err)
+        return
+    }
 
-	// แทรกข้อความแปลกลับไปยัง .json
-	jsonData["translated_name"] = translatedText
+    // Save the modified JSON (you can choose a different output file name)
+    err = os.WriteFile("translated_output.json", updatedJSON, 0644)
+    if err != nil {
+        fmt.Println("Error writing file:", err)
+        return
+    }
 
-	// เขียน JSON ไปยังไฟล์
-	output, err := json.MarshalIndent(jsonData, "", "    ")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	err = ioutil.WriteFile(*outputPath, output, 0644)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println("Translation successful!")
+    fmt.Println("Translation complete! Results saved in translated_output.json")
 }
