@@ -1,98 +1,171 @@
 package main
 
-import (
-	"fmt"
-	"io/ioutil"
-	"os"
+  import (
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "os"
 
-	"github.com/minio/simdjson-go"
-	"github.com/your-translation-package" // Import your translation package here
-)
+    "github.com/Conight/go-googletrans"
+  )
 
-func saveJSON(jsonData interface{}, filename string) error {
-	data, err := simdjson.Marshal(jsonData)
-	if err != nil {
-		return err
-	}
-	err = ioutil.WriteFile(filename, data, 0644)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+  type Event struct {
+    ID       int      `json:"id"`
+    Name     string   `json:"name"`
+    List     []Action `json:"list"`
+    SwitchID int      `json:"switchId"`
+    Trigger  int      `json:"trigger"`
+  }
 
-func readJSON(filename string) (interface{}, error) {
-	data, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	parsed, err := simdjson.Parse(data, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	var jsonData interface{}
-	err = parsed.Unmarshal(&jsonData)
-	if err != nil {
-		return nil, err
-	}
-
-	return jsonData, nil
-}
-
-func translateAll(jsonData interface{}, targetLang string) interface{} {
-	switch jsonData.(type) {
-	case string:
-		translatedText, err := translateText(jsonData.(string), targetLang)
-		if err != nil {
-			fmt.Println("Error translating text:", err)
-			os.Exit(1)
-		}
-		return translatedText
-	case map[string]interface{}:
-		translatedMap := make(map[string]interface{})
-		for key, value := range jsonData.(map[string]interface{}) {
-			translatedMap[key] = translateAll(value, targetLang)
-		}
-		return translatedMap
-	case []interface{}:
-		translatedSlice := make([]interface{}, len(jsonData.([]interface{})))
-		for i, value := range jsonData.([]interface{}) {
-			translatedSlice[i] = translateAll(value, targetLang)
-		}
-		return translatedSlice
-	default:
-		return jsonData
-	}
-}
-
-func translateText(text string, targetLang string) (string, error) {
-	// Assuming you have a translation service, use it here
-	result, err := yourTranslationPackage.Translate(text, targetLang, "auto")
-	if err != nil {
-		return "", err
-	}
-	return result.Text, nil
-}
+  type Action struct {
+    Code       int           `json:"code"`
+    Indent     int           `json:"indent"`
+    Parameters []interface{} `json:"parameters"`
+  }
 
 func main() {
-	filename := "your_json_file.json"
-	targetLang := "en"
+    events, err := readJSONFile("CommonEvents.json")
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
 
-	jsonData, err := readJSON(filename)
-	if err != nil {
-		fmt.Println("Error reading JSON:", err)
-		os.Exit(1)
-	}
+    for _, event := range events {
+        fmt.Println("Original Event Name:", event.Name)
 
-	translatedData := translateAll(jsonData, targetLang)
+        if translatedName, err := translateText(event.Name, "th"); err != nil {
+            fmt.Println("Translation error:", err)
+        } else {
+            event.Name = translatedName
+            fmt.Println("Translated Event Name:", event.Name)
+        }
 
-	err = saveJSON(translatedData, "translated.json")
-	if err != nil {
-		fmt.Println("Error saving translated JSON:", err)
-		os.Exit(1)
-	}
+        processActions(event.List)
+    }
 
-	fmt.Println("Translation completed and saved to translated.json")
+    // Export translated JSON
+    if err := exportTranslatedJSON(events); err != nil {
+        fmt.Println("Error exporting translated JSON:", err)
+        return
+    }
+}
+
+
+  func readJSONFile(filename string) ([]Event, error) {
+    jsonFile, err := os.Open(filename)
+    if err != nil {
+      return nil, err
+    }
+    defer jsonFile.Close()
+
+    byteValue, err := ioutil.ReadAll(jsonFile)
+    if err != nil {
+      return nil, err
+    }
+
+    var events []Event
+    err = json.Unmarshal(byteValue, &events)
+    return events, err
+  }
+
+  func processActions(actions []Action) {
+    for _, action := range actions {
+      if len(action.Parameters) > 0 {
+        processParameter(action.Parameters[0])
+        if len(action.Parameters) > 1 {
+          if translatedParam, err := translateParameter(action.Parameters[1], "th"); err != nil {
+            fmt.Println("Translation error:", err)
+          } else {
+            action.Parameters[1] = translatedParam
+            fmt.Println("Translated Parameter:", action.Parameters[1])
+          }
+        }
+      } else {
+        fmt.Println("Action has no parameters")
+      }
+    }
+  }
+
+func processParameter(param interface{}) {
+    switch v := param.(type) {
+    case string:
+        if translatedParam, err := translateText(v, "th"); err != nil {
+            fmt.Println("Translation error:", err)
+        } else {
+            fmt.Println("Translated Parameter:", translatedParam)
+        }
+    case int:
+        fmt.Println("Integer Parameter:", v)
+    default:
+        fmt.Println("Other Parameter Type:", v)
+    }
+}
+
+
+  func translateText(text string, targetLanguage string) (string, error) {
+    t := translator.New()
+    result, err := t.Translate(text, "auto", targetLanguage)
+    if err != nil {
+      return "", err
+    }
+    return result.Text, nil
+  }
+
+  func translateParameter(param interface{}, targetLanguage string) (interface{}, error) {
+    switch v := param.(type) {
+    case string:
+      if translatedText, err := translateText(v, targetLanguage); err != nil {
+        return "", err
+      } else {
+        return translatedText, nil
+      }
+    case int, float64:
+      return v, nil
+    default:
+      return "", fmt.Errorf("unsupported parameter type: %T", v)
+    }
+  }
+
+
+func exportTranslatedJSON(events []Event) error {
+    translatedEvents := make([]Event, len(events))
+    for i, event := range events {
+        translatedEvent := Event{
+            ID:       event.ID,
+            Name:     event.Name,
+            List:     event.List,
+            SwitchID: event.SwitchID,
+            Trigger:  event.Trigger,
+        }
+
+        translatedName, err := translateText(event.Name, "th")
+        if err != nil {
+            return err
+        }
+        translatedEvent.Name = translatedName
+
+        for _, action := range translatedEvent.List {
+            if len(action.Parameters) > 1 {
+                if translatedParam, err := translateParameter(action.Parameters[1], "th"); err == nil {
+                    action.Parameters[1] = translatedParam
+                }
+            }
+        }
+
+        translatedEvents[i] = translatedEvent
+    }
+
+    // Encode translatedEvents to JSON
+    jsonBytes, err := json.Marshal(translatedEvents)
+    if err != nil {
+        return err
+    }
+
+    // Write JSON to file
+    err = ioutil.WriteFile("TranslatedEvents.json", jsonBytes, 0644)
+    if err != nil {
+        return err
+    }
+
+    return nil
 }
